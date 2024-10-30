@@ -21,7 +21,11 @@ public:
 	UTextBlock* DisplayText;
 
 	void SetDisplayText(FString TextToDisplay);
+	void SetDisplayColor(FColor ColorToDisplay);
 
+	UFUNCTION(BlueprintCallable)
+	void ShowPlayerName(APawn* InPawn);
+	
 	UFUNCTION(BlueprintCallable)
 	void ShowPlayerNetRoles(APawn* InPawn);
 	

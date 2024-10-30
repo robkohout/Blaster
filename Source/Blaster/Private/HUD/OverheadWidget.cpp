@@ -3,6 +3,8 @@
 
 #include "HUD/OverheadWidget.h"
 #include "Components/TextBlock.h"
+#include "GameFramework/PlayerState.h"
+
 
 void UOverheadWidget::SetDisplayText(FString TextToDisplay)
 {
@@ -10,6 +12,26 @@ void UOverheadWidget::SetDisplayText(FString TextToDisplay)
 	{
 		DisplayText->SetText(FText::FromString(TextToDisplay));
 	}
+}
+
+void UOverheadWidget::SetDisplayColor(FColor ColorToDisplay)
+{
+	if(DisplayText)
+	{
+		FSlateColor DisplayTextColor = FSlateColor(ColorToDisplay);
+		DisplayText->SetColorAndOpacity(DisplayTextColor);
+	}
+}
+
+void UOverheadWidget::ShowPlayerName(APawn* InPawn)
+{
+	const APlayerState* PlayerState = InPawn->GetPlayerState();
+	FString PlayerName = PlayerState ==	nullptr ? "NAME" : PlayerState->GetPlayerName();
+	FColor DisplayColor = (InPawn->GetLocalRole() == ENetRole::ROLE_AutonomousProxy ||
+							InPawn->GetRemoteRole() == ENetRole::ROLE_AutonomousProxy) ?
+								FColor::Blue : FColor::Red;
+	SetDisplayText(PlayerName);
+	SetDisplayColor(DisplayColor);	
 }
 
 void UOverheadWidget::ShowPlayerNetRoles(APawn* InPawn)
