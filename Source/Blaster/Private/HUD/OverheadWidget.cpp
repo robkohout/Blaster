@@ -5,7 +5,6 @@
 #include "Components/TextBlock.h"
 #include "GameFramework/PlayerState.h"
 
-
 void UOverheadWidget::SetDisplayText(FString TextToDisplay)
 {
 	if(DisplayText)
@@ -26,12 +25,8 @@ void UOverheadWidget::SetDisplayColor(FColor ColorToDisplay)
 void UOverheadWidget::ShowPlayerName(APawn* InPawn)
 {
 	const APlayerState* PlayerState = InPawn->GetPlayerState();
-	FString PlayerName = PlayerState ==	nullptr ? "NAME" : PlayerState->GetPlayerName();
-	FColor DisplayColor = (InPawn->GetLocalRole() == ENetRole::ROLE_AutonomousProxy ||
-							InPawn->GetRemoteRole() == ENetRole::ROLE_AutonomousProxy) ?
-								FColor::Blue : FColor::Red;
+	FString PlayerName = PlayerState ==	nullptr ? "ERROR" : PlayerState->GetPlayerName();
 	SetDisplayText(PlayerName);
-	SetDisplayColor(DisplayColor);	
 }
 
 void UOverheadWidget::ShowPlayerNetRoles(APawn* InPawn)

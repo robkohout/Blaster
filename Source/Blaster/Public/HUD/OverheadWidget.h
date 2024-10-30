@@ -20,7 +20,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* DisplayText;
 
+	UFUNCTION(BlueprintCallable)
 	void SetDisplayText(FString TextToDisplay);
+
+	UFUNCTION(BlueprintCallable)
 	void SetDisplayColor(FColor ColorToDisplay);
 
 	UFUNCTION(BlueprintCallable)
