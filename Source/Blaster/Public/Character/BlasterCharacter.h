@@ -33,7 +33,7 @@ protected:
 	void AddInputMappingContext();
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void Equip();
+	void EquipButtonPressed();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -69,4 +69,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
+
+	UFUNCTION(Server, Reliable)
+	void ServerEquipButtonPressed();
 };

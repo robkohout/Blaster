@@ -74,7 +74,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::Jump);
-		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ThisClass::Equip);
+		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ThisClass::EquipButtonPressed);
 	}
 }
 
@@ -111,11 +111,26 @@ void ABlasterCharacter::Look(const FInputActionValue& Value)
 	AddControllerPitchInput(LookAxisVector.Y);
 }
 
-void ABlasterCharacter::Equip()
+void ABlasterCharacter::EquipButtonPressed()
 {
-	if(Combat && HasAuthority())
+	if(Combat)
 	{
-		Combat->EquipWeapon((OverlappingWeapon));
+		if(HasAuthority())
+		{
+			Combat->EquipWeapon(OverlappingWeapon);	
+		}
+		else
+		{
+			ServerEquipButtonPressed();
+		}
+	}
+}
+
+void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
+{
+	if(Combat)
+	{
+		Combat->EquipWeapon(OverlappingWeapon);
 	}
 }
 
