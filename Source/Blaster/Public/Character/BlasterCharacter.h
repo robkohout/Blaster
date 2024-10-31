@@ -23,6 +23,7 @@ public:
 	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
+	bool IsAiming();
 	
 protected:
 	virtual void BeginPlay() override;
@@ -35,6 +36,8 @@ protected:
 	void EquipButtonPressed();
 	void CrouchButtonPressed();
 	void CrouchButtonReleased();
+	void AimButtonPressed();
+	void AimButtonReleased();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -64,6 +67,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* UncrouchAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* AimStartAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* AimEndAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* OverheadWidget;
