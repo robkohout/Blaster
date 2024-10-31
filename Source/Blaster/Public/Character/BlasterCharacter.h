@@ -25,6 +25,7 @@ public:
 	virtual void Jump() override;
 
 	void SetOverlappingWeapon(AWeapon* Weapon);
+	bool IsWeaponEquipped();
 	
 protected:
 	virtual void BeginPlay() override;
