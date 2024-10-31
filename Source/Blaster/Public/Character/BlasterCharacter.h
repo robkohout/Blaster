@@ -21,9 +21,6 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
 	
-	/* Input */
-	virtual void Jump() override;
-
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	
@@ -34,7 +31,10 @@ protected:
 	void AddInputMappingContext();
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void JumpButtonPressed();
 	void EquipButtonPressed();
+	void CrouchButtonPressed();
+	void CrouchButtonReleased();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -58,6 +58,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* EquipAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* CrouchAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* UncrouchAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* OverheadWidget;
