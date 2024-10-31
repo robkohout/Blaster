@@ -6,7 +6,6 @@
 #include "Blueprint/UserWidget.h"
 #include "OverheadWidget.generated.h"
 
-class UTextBlock;
 
 /**
  * 
@@ -18,7 +17,7 @@ class BLASTER_API UOverheadWidget : public UUserWidget
 
 public:
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* DisplayText;
+	class UTextBlock* DisplayText;
 
 	UFUNCTION(BlueprintCallable)
 	void SetDisplayText(FString TextToDisplay);
