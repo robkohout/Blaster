@@ -244,3 +244,8 @@ bool ABlasterCharacter::IsAiming()
 	return (Combat && Combat->bIsAiming);
 }
 
+AWeapon* ABlasterCharacter::GetEquippedWeapon()
+{
+	return Combat ? Combat->EquippedWeapon : nullptr;
+}
+
