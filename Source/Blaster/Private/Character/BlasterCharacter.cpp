@@ -44,6 +44,7 @@ ABlasterCharacter::ABlasterCharacter()
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 0.f, 850.f);
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -151,7 +152,14 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 
 void ABlasterCharacter::JumpButtonPressed()
 {
-	Jump();
+	if(bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Jump();	
+	}
 }
 
 void ABlasterCharacter::CrouchButtonPressed()
