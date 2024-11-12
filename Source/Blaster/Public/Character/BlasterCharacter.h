@@ -40,7 +40,9 @@ protected:
 	void CrouchButtonReleased();
 	void AimButtonPressed();
 	void AimButtonReleased();
-	
+	void FireButtonPressed();
+	void FireButtonReleased();
+
 	void AimOffset(float DeltaTime);
 	
 private:
@@ -70,13 +72,10 @@ private:
 	UInputAction* CrouchAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* UncrouchAction;
+	UInputAction* AimAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* AimStartAction;
-
-	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* AimEndAction;
+	UInputAction* FireAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* OverheadWidget;

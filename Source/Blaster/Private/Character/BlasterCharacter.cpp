@@ -87,10 +87,12 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::JumpButtonPressed);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ThisClass::EquipButtonPressed);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &ThisClass::CrouchButtonPressed);
-		EnhancedInputComponent->BindAction(UncrouchAction, ETriggerEvent::Triggered, this, &ThisClass::CrouchButtonReleased);
-		EnhancedInputComponent->BindAction(AimStartAction, ETriggerEvent::Triggered, this, &ThisClass::AimButtonPressed);
-		EnhancedInputComponent->BindAction(AimEndAction, ETriggerEvent::Triggered, this, &ThisClass::AimButtonReleased);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ThisClass::CrouchButtonPressed);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &ThisClass::CrouchButtonReleased);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &ThisClass::AimButtonPressed);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ThisClass::AimButtonReleased);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ThisClass::FireButtonPressed);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &ThisClass::FireButtonReleased);
 	}
 }
 
@@ -164,16 +166,19 @@ void ABlasterCharacter::JumpButtonPressed()
 
 void ABlasterCharacter::CrouchButtonPressed()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("CrouchButtonPressed"));
 	Crouch();	
 }
 
 void ABlasterCharacter::CrouchButtonReleased()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("CrouchButtonReleased"));
 	UnCrouch();
 }
 
 void ABlasterCharacter::AimButtonPressed()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("AimButtonPressed"));
 	if(Combat)
 	{
 		Combat->SetAiming(true);
@@ -182,10 +187,22 @@ void ABlasterCharacter::AimButtonPressed()
 
 void ABlasterCharacter::AimButtonReleased()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("AimButtonReleased"));
 	if(Combat)
 	{
 		Combat->SetAiming(false);
 	}
+}
+
+void ABlasterCharacter::FireButtonPressed()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("FireButtonPressed"));
+
+}
+
+void ABlasterCharacter::FireButtonReleased()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("FireButtonReleased"));
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)
