@@ -13,6 +13,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "Weapon/Weapon.h"
+#include "Character/BlasterAnimInstance.h"
 
 
 ABlasterCharacter::ABlasterCharacter()
@@ -60,6 +61,20 @@ void ABlasterCharacter::PostInitializeComponents()
 	if(Combat)
 	{
 		Combat->Character = this;
+	}
+}
+
+void ABlasterCharacter::PlayFireMontage(bool bAiming)
+{
+	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && FireWeaponMontage)
+	{
+		AnimInstance->Montage_Play(FireWeaponMontage);
+		FName SectionName;
+		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
 
@@ -166,19 +181,16 @@ void ABlasterCharacter::JumpButtonPressed()
 
 void ABlasterCharacter::CrouchButtonPressed()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("CrouchButtonPressed"));
 	Crouch();	
 }
 
 void ABlasterCharacter::CrouchButtonReleased()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("CrouchButtonReleased"));
 	UnCrouch();
 }
 
 void ABlasterCharacter::AimButtonPressed()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("AimButtonPressed"));
 	if(Combat)
 	{
 		Combat->SetAiming(true);
@@ -187,7 +199,6 @@ void ABlasterCharacter::AimButtonPressed()
 
 void ABlasterCharacter::AimButtonReleased()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("AimButtonReleased"));
 	if(Combat)
 	{
 		Combat->SetAiming(false);
@@ -196,13 +207,18 @@ void ABlasterCharacter::AimButtonReleased()
 
 void ABlasterCharacter::FireButtonPressed()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("FireButtonPressed"));
-
+	if (Combat)
+	{
+		Combat->FireButtonPressed(true);
+	}
 }
 
 void ABlasterCharacter::FireButtonReleased()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("FireButtonReleased"));
+	if (Combat)
+	{
+		Combat->FireButtonPressed(false);
+	}
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)
@@ -299,7 +315,7 @@ bool ABlasterCharacter::IsWeaponEquipped()
 
 bool ABlasterCharacter::IsAiming()
 {
-	return (Combat && Combat->bIsAiming);
+	return (Combat && Combat->bAiming);
 }
 
 AWeapon* ABlasterCharacter::GetEquippedWeapon()

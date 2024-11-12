@@ -24,14 +24,16 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
-	void SetAiming(bool bAiming);
+	void SetAiming(bool bIsAiming);
 
 	UFUNCTION(Server, Reliable)
-	void ServerSetAiming(bool bAiming);
+	void ServerSetAiming(bool bIsAiming);
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 	
+	void FireButtonPressed(bool bPressed);
+
 private:
 	ABlasterCharacter* Character;
 
@@ -39,11 +41,13 @@ private:
 	AWeapon* EquippedWeapon;
 
 	UPROPERTY(Replicated)
-	bool bIsAiming;
+	bool bAiming;
 
 	UPROPERTY(EditAnywhere)
 	float BaseWalkSpeed;
 
 	UPROPERTY(EditAnywhere)
 	float AimWalkSpeed;
+
+	bool bFireButtonPressed;
 };

@@ -32,22 +32,22 @@ void UCombatComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
 	
 }
 
-void UCombatComponent::SetAiming(bool bAiming)
+void UCombatComponent::SetAiming(bool bIsAiming)
 {
-	bIsAiming = bAiming;
+	bAiming = bIsAiming;
 	ServerSetAiming(bIsAiming);
 	if(Character)
 	{
-		Character->GetCharacterMovement()->MaxWalkSpeed = bAiming ? AimWalkSpeed : BaseWalkSpeed;
+		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 	}
 }
 
-void UCombatComponent::ServerSetAiming_Implementation(bool bAiming)
+void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 {
-	bIsAiming = bAiming;
+	bAiming = bIsAiming;
 	if(Character)
 	{
-		Character->GetCharacterMovement()->MaxWalkSpeed = bAiming ? AimWalkSpeed : BaseWalkSpeed;
+		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 	}
 }
 
@@ -56,7 +56,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
-	DOREPLIFETIME(UCombatComponent, bIsAiming);
+	DOREPLIFETIME(UCombatComponent, bAiming);
 }
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
@@ -81,6 +81,15 @@ void UCombatComponent::OnRep_EquippedWeapon()
 	{
 		Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 		Character->bUseControllerRotationYaw = true;
+	}
+}
+
+void UCombatComponent::FireButtonPressed(bool bPressed)
+{
+	bFireButtonPressed = bPressed;
+	if (Character && bFireButtonPressed)
+	{
+		Character->PlayFireMontage(bAiming);
 	}
 }
 

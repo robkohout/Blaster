@@ -1,7 +1,7 @@
 // Copyright Rob Kohout
 
-#include "Components/BoxComponent.h"
 #include "Weapon/Projectile.h"
+#include "Components/BoxComponent.h"
 
 
 AProjectile::AProjectile()
