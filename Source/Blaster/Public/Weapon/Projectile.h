@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
-class UBoxComponent;
 
 UCLASS()
 class BLASTER_API AProjectile : public AActor
@@ -22,5 +21,8 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere)
-	UBoxComponent* CollisionBox;
+	class UBoxComponent* CollisionBox;
+
+	UPROPERTY(VisibleAnywhere)
+	class UProjectileMovementComponent* ProjectileMovementComponent;
 };
