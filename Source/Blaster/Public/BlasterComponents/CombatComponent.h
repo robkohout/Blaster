@@ -8,8 +8,6 @@
 
 #define TRACE_LENGTH 80000.f
 
-class AWeapon;
-class ABlasterCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BLASTER_API UCombatComponent : public UActorComponent
@@ -22,7 +20,7 @@ public:
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
-	void EquipWeapon(AWeapon* WeaponToEquip);
+	void EquipWeapon(class AWeapon* WeaponToEquip);
 	
 protected:
 	virtual void BeginPlay() override;
@@ -44,8 +42,12 @@ protected:
 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
+	void SetHUDCrossHairs(float DeltaTime);
+
 private:
-	ABlasterCharacter* Character;
+	class ABlasterCharacter* Character;
+	class ABlasterPlayerController* Controller;
+	class ABlasterHUD* HUD;
 
 	UPROPERTY(Replicated, ReplicatedUsing = OnRep_EquippedWeapon)
 	AWeapon* EquippedWeapon;
