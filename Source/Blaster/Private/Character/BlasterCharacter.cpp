@@ -46,8 +46,8 @@ ABlasterCharacter::ABlasterCharacter()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
-	NetUpdateFrequency = 66.f;
-	MinNetUpdateFrequency = 33.f;
+	NetUpdateFrequency = 100.f;
+	MinNetUpdateFrequency = 50.f;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 0.f, 850.f);
 }
 
