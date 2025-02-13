@@ -15,7 +15,7 @@
 #include "Weapon/Weapon.h"
 #include "Character/BlasterAnimInstance.h"
 #include "Blaster/Blaster.h"
-
+#include "PlayerController/BlasterPlayerController.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -100,6 +100,11 @@ void ABlasterCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	AddInputMappingContext();
+	BlasterPlayerController = Cast<ABlasterPlayerController>(GetController());
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
 }
 
 void ABlasterCharacter::Tick(float DeltaTime)

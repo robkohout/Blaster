@@ -10,6 +10,8 @@
 #include "BlasterCharacter.generated.h"
 
 
+class ABlasterPlayerController;
+
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
 {
@@ -124,6 +126,8 @@ private:
 	
 	UFUNCTION()
 	void OnRep_Health();
+
+	ABlasterPlayerController* BlasterPlayerController;
 	
 public:
 	void SetOverlappingWeapon(class AWeapon* Weapon);
