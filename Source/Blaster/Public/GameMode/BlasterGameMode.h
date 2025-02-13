@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+#include "PlayerController/BlasterPlayerController.h"
 #include "BlasterGameMode.generated.h"
+
+class ABlasterPlayerController;
+class ABlasterCharacter;
 
 /**
  * 
@@ -16,4 +20,6 @@ class BLASTER_API ABlasterGameMode : public AGameMode
 	
 public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 };

@@ -1,7 +1,6 @@
 // Copyright Rob Kohout
 
 #include "GameMode/BlasterGameMode.h"
-#include "Character/BlasterCharacter.h"
 #include "GameFramework/PlayerState.h"
 
 
@@ -24,4 +23,10 @@ void ABlasterGameMode::PostLogin(APlayerController* NewPlayer)
 				);
 		}
 	}
+}
+
+void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* EliminatedCharacter,
+	ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
+{
+	
 }
