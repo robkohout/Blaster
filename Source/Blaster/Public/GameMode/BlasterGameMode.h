@@ -20,6 +20,6 @@ class BLASTER_API ABlasterGameMode : public AGameMode
 	
 public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
-
 	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
+	virtual void RequestRespawn(ACharacter* EliminatedCharacter, AController* EliminatedController);
 };
