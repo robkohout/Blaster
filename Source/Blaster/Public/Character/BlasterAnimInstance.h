@@ -8,6 +8,9 @@
 #include "BlasterAnimInstance.generated.h"
 
 
+class AWeapon;
+class ABlasterCharacter;
+
 /**
  * 
  */
@@ -22,7 +25,7 @@ public:
 
 private:
 	UPROPERTY(BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
-	class ABlasterCharacter* BlasterCharacter;
+	ABlasterCharacter* BlasterCharacter;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	float Speed;
@@ -36,7 +39,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	bool bWeaponEquipped;
 
-	class AWeapon* EquippedWeapon;
+	AWeapon* EquippedWeapon;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	bool bIsCrouched;
@@ -71,4 +74,7 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	bool bLocallyControlled;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	bool bEliminated;
 };

@@ -10,6 +10,13 @@
 #include "BlasterCharacter.generated.h"
 
 
+class UCombatComponent;
+class AWeapon;
+class UWidgetComponent;
+class UInputAction;
+class UInputMappingContext;
+class UCameraComponent;
+class USpringArmComponent;
 class ABlasterPlayerController;
 
 UCLASS()
@@ -25,6 +32,9 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
+	void PlayElimMontage();
+
+	UFUNCTION(NetMulticast, Reliable)
 	void Eliminate();
 	
 protected:
@@ -51,17 +61,17 @@ protected:
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
-	class USpringArmComponent* CameraBoom;
+	USpringArmComponent* CameraBoom;
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
-	class UCameraComponent* FollowCamera;
+	UCameraComponent* FollowCamera;
 
 	/* Input */
 	UPROPERTY(EditAnywhere, Category = Input)
-	class UInputMappingContext* BlasterContext;
+	UInputMappingContext* BlasterContext;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	class UInputAction* MoveAction;
+	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* LookAction;
@@ -82,16 +92,16 @@ private:
 	UInputAction* FireAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UWidgetComponent* OverheadWidget;
+	UWidgetComponent* OverheadWidget;
 
 	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
-	class AWeapon* OverlappingWeapon;
+	AWeapon* OverlappingWeapon;
 
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
 	UPROPERTY(VisibleAnywhere)
-	class UCombatComponent* Combat;
+	UCombatComponent* Combat;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
@@ -105,11 +115,14 @@ private:
 	void TurnInPlace(float DeltaTime);
 	
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	class UAnimMontage* FireWeaponMontage;
+	UAnimMontage* FireWeaponMontage;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	class UAnimMontage* HitReactMontage;
+	UAnimMontage* HitReactMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	UAnimMontage* ElimMontage;
+	
 	void HideCharacterIfCameraClose();
 
 	UPROPERTY(EditAnywhere)
@@ -129,6 +142,8 @@ private:
 	void OnRep_Health();
 
 	ABlasterPlayerController* BlasterPlayerController;
+
+	bool bEliminated = false;
 	
 public:
 	void SetOverlappingWeapon(class AWeapon* Weapon);
@@ -140,4 +155,5 @@ public:
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 	FVector GetHitTarget() const;
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE bool IsEliminated() const { return bEliminated; }
 };
