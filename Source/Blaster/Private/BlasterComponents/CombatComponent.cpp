@@ -62,10 +62,13 @@ void UCombatComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
 
 void UCombatComponent::FireButtonPressed(bool bPressed)
 {
-	bFireButtonPressed = bPressed;
-	if (bFireButtonPressed)
+	if (EquippedWeapon)
 	{
-		Fire();
+		bFireButtonPressed = bPressed;
+		if (bFireButtonPressed)
+		{
+			Fire();
+		}	
 	}
 }
 
