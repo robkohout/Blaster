@@ -11,6 +11,7 @@
 #include "BlasterCharacter.generated.h"
 
 
+class ABlasterPlayerState;
 class UCombatComponent;
 class AWeapon;
 class UWidgetComponent;
@@ -55,11 +56,13 @@ protected:
 	void FireButtonPressed();
 	void FireButtonReleased();
 	void PlayHitReactMontage();
-	void UpdateHUDHealth();
 	void AimOffset(float DeltaTime);
-
+		
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
+	void UpdateHUDHealth();
+	// Poll for any relevant classes and initialize our HUD
+	void PollInit();
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -189,6 +192,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundCue* ElimBotSound;
+
+	ABlasterPlayerState* BlasterPlayerState;
 	
 public:
 	void SetOverlappingWeapon(class AWeapon* Weapon);

@@ -19,6 +19,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "PlayerController/BlasterPlayerController.h"
+#include "PlayerState/BlasterPlayerState.h"
 #include "Sound/SoundCue.h"
 
 ABlasterCharacter::ABlasterCharacter()
@@ -93,6 +94,7 @@ void ABlasterCharacter::Tick(float DeltaTime)
 
 	AimOffset(DeltaTime);
 	HideCharacterIfCameraClose();
+	PollInit();
 }
 
 void ABlasterCharacter::PlayFireMontage(bool bAiming)
@@ -465,6 +467,18 @@ void ABlasterCharacter::UpdateHUDHealth()
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
+
+void ABlasterCharacter::PollInit()
+{
+	if (BlasterPlayerState == nullptr)
+	{
+		BlasterPlayerState = GetPlayerState<ABlasterPlayerState>();
+		if (BlasterPlayerState)
+		{
+			BlasterPlayerState->AddToScore(0.f);
+		}
 	}
 }
 
