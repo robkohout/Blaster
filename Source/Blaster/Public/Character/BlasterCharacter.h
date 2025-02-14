@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "BlasterTypes/TurningInPlace.h"
+#include "Components/TimelineComponent.h"
 #include "Interfaces/InteractWithCrosshairsInterface.h"
 #include "BlasterCharacter.generated.h"
 
@@ -152,6 +153,29 @@ private:
 	float EliminatedDelay = 3.f;
 	
 	void EliminatedTimerFinished();
+
+	/*
+	 * Dissolve Effect
+	 */
+
+	UPROPERTY(VisibleAnywhere)
+	UTimelineComponent* DissolveTimeline;
+	FOnTimelineFloat DissolveTrack;
+
+	UPROPERTY(EditAnywhere)
+	UCurveFloat* DissolveCurve;
+
+	UFUNCTION()
+	void UpdateDissolveMaterial(float DissolveValue);
+	void StartDissolve();
+
+	// Dynamic instance that we can change at runtime
+	UPROPERTY(VisibleAnywhere, Category="Eliminated")
+	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
+
+	// Material instance set on the Blueprint, used with the dynamic material instance
+	UPROPERTY(EditAnywhere, Category="Eliminated")
+	UMaterialInstance* DissolveMaterialInstance;
 	
 public:
 	void SetOverlappingWeapon(class AWeapon* Weapon);
