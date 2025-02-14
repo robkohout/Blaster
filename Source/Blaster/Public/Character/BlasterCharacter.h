@@ -35,9 +35,9 @@ public:
 	void PlayFireMontage(bool bAiming);
 	void PlayElimMontage();
 	void Eliminated();
-	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastEliminated();
+	virtual void Destroyed() override;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -176,6 +176,19 @@ private:
 	// Material instance set on the Blueprint, used with the dynamic material instance
 	UPROPERTY(EditAnywhere, Category="Eliminated")
 	UMaterialInstance* DissolveMaterialInstance;
+
+	/*
+	 * Elim bot
+	 */
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ElimBotEffect;
+
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ElimBotComponent;
+
+	UPROPERTY(EditAnywhere)
+	USoundCue* ElimBotSound;
 	
 public:
 	void SetOverlappingWeapon(class AWeapon* Weapon);
