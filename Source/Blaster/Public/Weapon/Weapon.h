@@ -29,7 +29,8 @@ public:
 	void ShowPickupWidget(bool bShowWidget);
 	void SetWeaponState(EWeaponState State);
 	virtual void Fire(const FVector& HitTarget);
-
+	void Dropped();
+	
 	/*
 	* Textures for the weapon crosshairs
 	*/
