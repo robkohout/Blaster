@@ -31,31 +31,27 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
-	void SetAiming(bool bIsAiming);
 
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(bool bIsAiming);
-
+	void SetAiming(bool bIsAiming);
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
+	void SetHUDCrossHairs(float DeltaTime);
+	
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
-	void Fire();
-
-	void FireButtonPressed(bool bPressed);
-
+	
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
-
+	void Fire();
+	void FireButtonPressed(bool bPressed);
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
-
-	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
-
-	void SetHUDCrossHairs(float DeltaTime);
+	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);	
 
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
-
 	void HandleReload();
+	int32 AmountToReload();
 	
 private:
 	UPROPERTY()
@@ -136,4 +132,6 @@ private:
 
 	UFUNCTION()
 	void OnRep_CombatState();
+
+	void UpdateAmmoValues();
 };
