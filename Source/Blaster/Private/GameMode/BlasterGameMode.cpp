@@ -35,6 +35,19 @@ void ABlasterGameMode::Tick(float DeltaSeconds)
 	}
 }
 
+void ABlasterGameMode::OnMatchStateSet()
+{
+	Super::OnMatchStateSet();
+
+	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator();  It; ++It)
+	{
+		if (ABlasterPlayerController* BlasterPlayer = Cast<ABlasterPlayerController>(*It))
+		{
+			BlasterPlayer->OnMatchStateSet(MatchState);
+		}
+	}
+}
+
 void ABlasterGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);

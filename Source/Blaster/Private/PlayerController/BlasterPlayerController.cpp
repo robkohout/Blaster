@@ -5,8 +5,31 @@
 #include "Character/BlasterCharacter.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "GameFramework/GameMode.h"
 #include "HUD/BlasterHUD.h"
 #include "HUD/CharacterOverlay.h"
+#include "Net/UnrealNetwork.h"
+
+void ABlasterPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
+}
+
+void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABlasterPlayerController, MatchState);
+}
+
+void ABlasterPlayerController::Tick(const float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	SetHUDTime();
+	CheckTimeSync(DeltaTime);
+}
 
 void ABlasterPlayerController::SetHUDHealth(const float Health, const float MaxHealth)
 {
@@ -63,7 +86,7 @@ void ABlasterPlayerController::SetHUDWeaponAmmo(const int Ammo)
 	}
 }
 
-void ABlasterPlayerController::SetUDCarriedAmmo(const int Ammo)
+void ABlasterPlayerController::SetHUDCarriedAmmo(const int Ammo)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	const bool bHUDValid = BlasterHUD &&
@@ -101,20 +124,6 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 	}
 }
 
-void ABlasterPlayerController::BeginPlay()
-{
-	Super::BeginPlay();
-
-	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
-}
-
-void ABlasterPlayerController::Tick(const float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	SetHUDTime();
-	CheckTimeSync(DeltaTime);
-}
-
 void ABlasterPlayerController::SetHUDTime()
 {
 	const uint32 SecondsLeft = FMath::CeilToInt(MatchTime - GetServerTime());
@@ -126,7 +135,7 @@ void ABlasterPlayerController::SetHUDTime()
 	CountdownInt = SecondsLeft;
 }
 
-void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
+void ABlasterPlayerController::CheckTimeSync(const float DeltaTime)
 {
 	TimeSyncRunningTime += DeltaTime;
 	if (IsLocalController() && TimeSyncRunningTime > TimeSyncFrequency)
@@ -162,5 +171,31 @@ void ABlasterPlayerController::ReceivedPlayer()
 	if (IsLocalController())
 	{
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
+	}
+}
+
+void ABlasterPlayerController::OnMatchStateSet(const FName State)
+{
+	MatchState = State;
+	if (MatchState == MatchState::InProgress)
+	{
+		BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+		if (BlasterHUD)
+		{
+			BlasterHUD->AddCharacterOverlay();
+		}
+	}
+}
+
+
+void ABlasterPlayerController::OnRep_MatchState()
+{
+	if (MatchState == MatchState::InProgress)
+	{
+		BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+		if (BlasterHUD)
+		{
+			BlasterHUD->AddCharacterOverlay();
+		}
 	}
 }

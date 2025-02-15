@@ -33,15 +33,16 @@ class BLASTER_API ABlasterHUD : public AHUD
 
 public:
 	virtual void DrawHUD() override;
-
+	void AddCharacterOverlay();
+	
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	TSubclassOf<UUserWidget> CharacterOverlayClass;
-	
+
+	UPROPERTY()
 	UCharacterOverlay* CharacterOverlay;
 
 protected:
 	virtual void BeginPlay() override;
-	void AddCharacterOverlay();
 	
 private:
 	FHUDPackage HUDPackage;

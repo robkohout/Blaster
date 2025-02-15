@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class UCharacterOverlay;
 class ABlasterHUD;
 
 /**
@@ -21,18 +22,19 @@ public:
 	void SetHUDScore(float Score);
 	void SetHUDDefeats(int Defeats);
 	void SetHUDWeaponAmmo(int Ammo);
-	void SetUDCarriedAmmo(int Ammo);
+	void SetHUDCarriedAmmo(int Ammo);
 	void SetHUDMatchCountdown(float CountdownTime);
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual float GetServerTime();  // Synced with server world clock
 	virtual void ReceivedPlayer() override;  // Sync with server clock as soon as possible
+	void OnMatchStateSet(FName State);
 	
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
-
+	
 	/*
 	 * Sync time between client and server
 	 */
@@ -59,4 +61,10 @@ private:
 
 	float MatchTime = 120.f;
 	uint32 CountdownInt = 0;
+
+	UPROPERTY(ReplicatedUsing=OnRep_MatchState)
+	FName MatchState;
+
+	UFUNCTION()
+	void OnRep_MatchState();
 };

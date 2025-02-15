@@ -21,7 +21,6 @@ class BLASTER_API ABlasterGameMode : public AGameMode
 public:
 	ABlasterGameMode();
 	virtual void Tick(float DeltaSeconds) override;
-	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	virtual void RequestRespawn(ACharacter* EliminatedCharacter, AController* EliminatedController);
@@ -33,6 +32,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void OnMatchStateSet() override;
 	
 private:
 	float CountdownTime = 0.f;

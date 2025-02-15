@@ -39,7 +39,7 @@ protected:
 	void SetHUDCrossHairs(float DeltaTime);
 	
 	UFUNCTION()
-	void OnRep_EquippedWeapon();
+	void OnRep_EquippedWeapon() const;
 	
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
@@ -115,7 +115,7 @@ private:
 	void StartFireTimer();
 	void FireTimerFinished();
 
-	bool CanFire();
+	bool CanFire() const;
 
 	// Carried ammo for the currently-equipped weapon
 	UPROPERTY(ReplicatedUsing = OnRep_CarriedAmmo)

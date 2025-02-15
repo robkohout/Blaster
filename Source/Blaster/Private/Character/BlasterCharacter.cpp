@@ -90,6 +90,7 @@ void ABlasterCharacter::BeginPlay()
 void ABlasterCharacter::Restart()
 {
 	Super::Restart();
+	
 	AddInputMappingContext();
 }
 

@@ -149,7 +149,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
 	if (Controller)
 	{
-		Controller->SetUDCarriedAmmo(CarriedAmmo);	
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);	
 	}
 
 	if (EquippedWeapon->EquipSound)
@@ -203,7 +203,7 @@ void UCombatComponent::UpdateAmmoValues()
 	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
 	if (Controller)
 	{
-		Controller->SetUDCarriedAmmo(CarriedAmmo);	
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);	
 	}
 	EquippedWeapon->AddAmmo(-ReloadAmount);
 }
@@ -246,16 +246,17 @@ void UCombatComponent::OnRep_CombatState()
 				Fire();
 			}
 			break;
+		default:
+			break;
 	}
 }
 
-void UCombatComponent::OnRep_EquippedWeapon()
+void UCombatComponent::OnRep_EquippedWeapon() const
 {
 	if(EquippedWeapon && Character)
 	{
 		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
-		const USkeletalMeshSocket* HandSocket = Character->GetMesh()->GetSocketByName(FName("RightHandSocket"));
-		if(HandSocket)
+		if(const USkeletalMeshSocket* HandSocket = Character->GetMesh()->GetSocketByName(FName("RightHandSocket")))
 		{
 			HandSocket->AttachActor(EquippedWeapon, Character->GetMesh());
 		}
@@ -296,7 +297,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 
 		if (Character)
 		{
-			float DistanceToCharacter = (Character->GetActorLocation() - Start).Size();
+			const float DistanceToCharacter = (Character->GetActorLocation() - Start).Size();
 			Start += CrosshairWorldDirection * (DistanceToCharacter + 30.f);
 		}
 
@@ -324,7 +325,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 	}
 }
 
-void UCombatComponent::SetHUDCrossHairs(float DeltaTime)
+void UCombatComponent::SetHUDCrossHairs(const float DeltaTime)
 {
 	if (Character == nullptr || Character->Controller == nullptr) return;
 
@@ -399,7 +400,7 @@ void UCombatComponent::SetHUDCrossHairs(float DeltaTime)
 	}
 }
 
-void UCombatComponent::InterpFOV(float DeltaTime)
+void UCombatComponent::InterpFOV(const float DeltaTime)
 {
 	if (EquippedWeapon == nullptr) return;
 
@@ -417,7 +418,7 @@ void UCombatComponent::InterpFOV(float DeltaTime)
 	}
 }
 
-void UCombatComponent::SetAiming(bool bIsAiming)
+void UCombatComponent::SetAiming(const bool bIsAiming)
 {
 	bAiming = bIsAiming;
 	ServerSetAiming(bIsAiming);
@@ -427,7 +428,7 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 	}
 }
 
-void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
+void UCombatComponent::ServerSetAiming_Implementation(const bool bIsAiming)
 {
 	bAiming = bIsAiming;
 	if(Character)
@@ -436,7 +437,7 @@ void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 	}
 }
 
-bool UCombatComponent::CanFire()
+bool UCombatComponent::CanFire() const
 {
 	if (EquippedWeapon == nullptr) return false;
 	return !EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Unoccupied;
@@ -447,6 +448,6 @@ void UCombatComponent::OnRep_CarriedAmmo()
 	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
 	if (Controller)
 	{
-		Controller->SetUDCarriedAmmo(CarriedAmmo);	
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);	
 	}
 }
