@@ -80,12 +80,17 @@ void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AddInputMappingContext();
 	UpdateHUDHealth();
 	if (HasAuthority())
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ThisClass::ReceiveDamage);
 	}
+}
+
+void ABlasterCharacter::Restart()
+{
+	Super::Restart();
+	AddInputMappingContext();
 }
 
 void ABlasterCharacter::Tick(float DeltaTime)
