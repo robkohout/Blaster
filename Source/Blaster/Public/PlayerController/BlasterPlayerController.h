@@ -22,12 +22,18 @@ public:
 	void SetHUDDefeats(int Defeats);
 	void SetHUDWeaponAmmo(int Ammo);
 	void SetUDCarriedAmmo(int Ammo);
+	void SetHUDMatchCountdown(float CountdownTime);
 	virtual void OnPossess(APawn* InPawn) override;
+	virtual void Tick(float DeltaTime) override;
 	
 protected:
 	virtual void BeginPlay() override;
-
+	void SetHUDTime();
+	
 private:
 	UPROPERTY()
 	ABlasterHUD* BlasterHUD;
+
+	float MatchTime = 120.f;
+	uint32 CountdownInt = 0;
 };
