@@ -7,6 +7,9 @@
 #include "Weapon.generated.h"
 
 
+class ABlasterPlayerController;
+class ABlasterCharacter;
+
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
 {
@@ -26,6 +29,8 @@ public:
 	AWeapon();
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void OnRep_Owner() override;
+	void SetHUDAmmo();
 	void ShowPickupWidget(bool bShowWidget);
 	void SetWeaponState(EWeaponState State);
 	virtual void Fire(const FVector& HitTarget);
@@ -109,6 +114,23 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACasing> CasingClass;
+
+	UPROPERTY(EditAnywhere, ReplicatedUsing=OnRep_Ammo)
+	int32 Ammo;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	void SpendRound();
+	
+	UPROPERTY(EditAnywhere)
+	int32 MagCapacity;
+
+	UPROPERTY()
+	ABlasterCharacter* BlasterOwnerCharacter;
+
+	UPROPERTY()
+	ABlasterPlayerController* BlasterOwnerController;
 	
 public:
 	FORCEINLINE USphereComponent* GetAreaSphere() { return AreaSphere; }

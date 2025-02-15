@@ -136,9 +136,12 @@ void ABlasterCharacter::Eliminated()
 
 void ABlasterCharacter::MulticastEliminated_Implementation()
 {
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->SetHUDWeaponAmmo(0);
+	}
 	bEliminated = true;
 	PlayElimMontage();
-
 	// Start dissolve effect
 	if (DissolveMaterialInstance)
 	{

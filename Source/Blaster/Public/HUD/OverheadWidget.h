@@ -40,6 +40,6 @@ public:
 protected:
 	virtual void NativeDestruct() override;
 
-	FString GetLocalNetRole(APawn* InPawn);
+	static FString GetLocalNetRole(APawn* InPawn);
 	FString GetRemoteNetRole(APawn* InPawn);
 };
