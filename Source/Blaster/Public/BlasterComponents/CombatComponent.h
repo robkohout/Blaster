@@ -9,6 +9,7 @@
 
 #define TRACE_LENGTH 80000.f
 
+class ABlasterPlayerController;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BLASTER_API UCombatComponent : public UActorComponent
@@ -47,9 +48,12 @@ protected:
 	void SetHUDCrossHairs(float DeltaTime);
 
 private:
-	class ABlasterCharacter* Character;
-	class ABlasterPlayerController* Controller;
-	class ABlasterHUD* HUD;
+	UPROPERTY()
+	ABlasterCharacter* Character;
+	UPROPERTY()
+	ABlasterPlayerController* Controller;
+	UPROPERTY()
+	ABlasterHUD* HUD;
 
 	UPROPERTY(Replicated, ReplicatedUsing = OnRep_EquippedWeapon)
 	AWeapon* EquippedWeapon;

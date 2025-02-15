@@ -17,10 +17,24 @@ class BLASTER_API ABlasterPlayerState : public APlayerState
 	GENERATED_BODY()
 
 public:
-	void AddToScore(float ScoreAmount);
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	/*
+	 * Replication notifies
+	 */
 	virtual void OnRep_Score() override;
+	
+	UFUNCTION()
+	virtual void OnRep_Defeats();
 
+	void AddToScore(float ScoreAmount);
+	void AddToDefeats(int32 DefeatsAmount);
+	
 private:
+	UPROPERTY()
 	ABlasterCharacter* Character;
+	UPROPERTY()
 	ABlasterPlayerController* Controller;
+
+	UPROPERTY(ReplicatedUsing=OnRep_Defeats)
+	int32 Defeats;
 };
