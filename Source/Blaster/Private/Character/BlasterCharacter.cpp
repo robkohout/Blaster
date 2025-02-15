@@ -446,12 +446,6 @@ void ABlasterCharacter::TurnInPlace(float DeltaTime)
 	}
 }
 
-FVector ABlasterCharacter::GetHitTarget() const
-{
-	if(Combat == nullptr) return FVector();
-	return Combat->HitTarget;
-}
-
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
 	if(OverlappingWeapon)
@@ -560,3 +554,13 @@ AWeapon* ABlasterCharacter::GetEquippedWeapon()
 	return Combat ? Combat->EquippedWeapon : nullptr;
 }
 
+
+FVector ABlasterCharacter::GetHitTarget() const
+{
+	return Combat ? Combat->HitTarget : FVector();
+}
+
+ECombatState ABlasterCharacter::GetCombatState() const
+{
+	return Combat ? Combat->CombatState : ECombatState::ECS_MAX;
+}

@@ -1,3 +1,5 @@
+// Copyright Rob Kohout
+
 #pragma once
 
 UENUM(BlueprintType)
