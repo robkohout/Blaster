@@ -119,5 +119,6 @@ private:
 	UFUNCTION()
 	void OnRep_CarriedAmmo();
 
+	UPROPERTY(EditAnywhere)
 	TMap<EWeaponType, int32> CarriedAmmoMap;
 };
