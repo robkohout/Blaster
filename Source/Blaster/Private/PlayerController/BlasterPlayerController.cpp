@@ -93,6 +93,17 @@ void ABlasterPlayerController::SetHUDEliminated(FString AttackerName)
 	}
 }
 
+void ABlasterPlayerController::HideEliminated()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	const bool bHUDValid = BlasterHUD &&
+		BlasterHUD->Eliminated;
+	if (bHUDValid)
+	{
+		BlasterHUD->Eliminated->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
 void ABlasterPlayerController::SetHUDWeaponAmmo(const int Ammo)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
@@ -141,10 +152,6 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 	if (const ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(InPawn))
 	{
 		SetHUDHealth(BlasterCharacter->GetHealth(), BlasterCharacter->GetMaxHealth());
-	}
-	if (BlasterHUD)
-	{
-		BlasterHUD->Eliminated->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

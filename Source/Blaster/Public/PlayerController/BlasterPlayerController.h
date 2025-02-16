@@ -22,6 +22,7 @@ public:
 	void SetHUDScore(float Score);
 	void SetHUDDefeats(int Defeats);
 	void SetHUDEliminated(FString AttackerName);
+	void HideEliminated();
 	void SetHUDWeaponAmmo(int Ammo);
 	void SetHUDCarriedAmmo(int Ammo);
 	void SetHUDMatchCountdown(float CountdownTime);

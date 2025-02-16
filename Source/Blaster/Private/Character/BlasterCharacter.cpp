@@ -92,6 +92,11 @@ void ABlasterCharacter::Restart()
 	Super::Restart();
 	
 	AddInputMappingContext();
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(GetController()) : BlasterPlayerController;
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->HideEliminated();
+	}
 }
 
 void ABlasterCharacter::Tick(float DeltaTime)
