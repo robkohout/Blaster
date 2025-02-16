@@ -21,6 +21,7 @@ class UInputMappingContext;
 class UCameraComponent;
 class USpringArmComponent;
 class ABlasterPlayerController;
+class USoundCue;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
