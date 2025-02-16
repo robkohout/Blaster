@@ -2,6 +2,7 @@
 
 #include "HUD/BlasterHUD.h"
 #include "Blueprint/UserWidget.h"
+#include "HUD/Announcement.h"
 #include "HUD/CharacterOverlay.h"
 
 void ABlasterHUD::DrawHUD()
@@ -54,11 +55,22 @@ void ABlasterHUD::BeginPlay()
 	}
 }
 
-void ABlasterHUD::AddCharacterOverlay()
+void ABlasterHUD::AddCharacterOverlay() const
 {
 	if (CharacterOverlay)
 	{
 		CharacterOverlay->AddToViewport();
+	}
+}
+
+
+void ABlasterHUD::AddAnnouncement()
+{
+	APlayerController* PlayerController = GetOwningPlayerController();
+	if (PlayerController && CharacterOverlayClass)
+	{
+		Announcement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
+		Announcement->AddToViewport();
 	}
 }
 
