@@ -4,6 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "HUD/Announcement.h"
 #include "HUD/CharacterOverlay.h"
+#include "HUD/Eliminated.h"
 
 void ABlasterHUD::DrawHUD()
 {
@@ -67,10 +68,22 @@ void ABlasterHUD::AddCharacterOverlay() const
 void ABlasterHUD::AddAnnouncement()
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
-	if (PlayerController && CharacterOverlayClass)
+	if (PlayerController && AnnouncementClass)
 	{
 		Announcement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
 		Announcement->AddToViewport();
+	}
+}
+
+
+void ABlasterHUD::AddEliminated()
+{
+	APlayerController* PlayerController = GetOwningPlayerController();
+	if (PlayerController && EliminatedClass)
+	{
+		Eliminated = CreateWidget<UEliminated>(PlayerController, EliminatedClass);
+		Eliminated->AddToViewport();
+		Eliminated->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

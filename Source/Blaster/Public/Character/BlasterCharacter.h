@@ -38,9 +38,9 @@ public:
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
 	void PlayElimMontage();
-	void Eliminated();
+	void Eliminated(const FString& AttackerName);
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastEliminated();
+	void MulticastEliminated(const FString& AttackerName);
 	virtual void Destroyed() override;
 	
 protected:

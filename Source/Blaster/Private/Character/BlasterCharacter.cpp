@@ -145,13 +145,13 @@ void ABlasterCharacter::PlayElimMontage()
 	}
 }
 
-void ABlasterCharacter::Eliminated()
+void ABlasterCharacter::Eliminated(const FString& AttackerName)
 {
 	if (Combat && Combat->EquippedWeapon)
 	{
 		Combat->EquippedWeapon->Dropped();
 	}
-	MulticastEliminated();
+	MulticastEliminated(AttackerName);
 	GetWorldTimerManager().SetTimer(
 		EliminatedTimer,
 		this,
@@ -159,11 +159,12 @@ void ABlasterCharacter::Eliminated()
 		EliminatedDelay);
 }
 
-void ABlasterCharacter::MulticastEliminated_Implementation()
+void ABlasterCharacter::MulticastEliminated_Implementation(const FString& AttackerName)
 {
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDWeaponAmmo(0);
+		BlasterPlayerController->SetHUDEliminated(AttackerName);
 	}
 	bEliminated = true;
 	PlayElimMontage();

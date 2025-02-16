@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "BlasterHUD.generated.h"
 
+class UEliminated;
 class UAnnouncement;
 class UCharacterOverlay;
 
@@ -49,6 +50,14 @@ public:
 	UAnnouncement* Announcement;
 
 	void AddAnnouncement();
+
+	UPROPERTY(EditAnywhere, Category = "Eliminated")
+	TSubclassOf<UUserWidget> EliminatedClass;
+
+	UPROPERTY()
+	UEliminated* Eliminated;
+
+	void AddEliminated();
 	
 protected:
 	virtual void BeginPlay() override;

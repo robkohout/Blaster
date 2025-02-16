@@ -9,6 +9,7 @@
 #include "HUD/Announcement.h"
 #include "HUD/BlasterHUD.h"
 #include "HUD/CharacterOverlay.h"
+#include "HUD/Eliminated.h"
 #include "Net/UnrealNetwork.h"
 
 void ABlasterPlayerController::BeginPlay()
@@ -19,6 +20,7 @@ void ABlasterPlayerController::BeginPlay()
 	if (BlasterHUD)
 	{
 		BlasterHUD->AddAnnouncement();
+		BlasterHUD->AddEliminated();
 	}
 }
 
@@ -60,7 +62,7 @@ void ABlasterPlayerController::SetHUDScore(const float Score)
 		BlasterHUD->CharacterOverlay->ScoreAmount;
 	if (bHUDValid)
 	{
-		const FString	ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
+		const FString ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
 		BlasterHUD->CharacterOverlay->ScoreAmount->SetText(FText::FromString(ScoreText));
 	}
 }
@@ -73,8 +75,21 @@ void ABlasterPlayerController::SetHUDDefeats(const int Defeats)
 		BlasterHUD->CharacterOverlay->DefeatsAmount;
 	if (bHUDValid)
 	{
-		const FString	DefeatsText = FString::Printf(TEXT("%d"), Defeats);
+		const FString DefeatsText = FString::Printf(TEXT("%d"), Defeats);
 		BlasterHUD->CharacterOverlay->DefeatsAmount->SetText(FText::FromString(DefeatsText));
+	}
+}
+
+void ABlasterPlayerController::SetHUDEliminated(FString AttackerName)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	const bool bHUDValid = BlasterHUD &&
+		BlasterHUD->Eliminated &&
+		BlasterHUD->Eliminated->AttackerNameText;
+	if (bHUDValid)
+	{
+		BlasterHUD->Eliminated->AttackerNameText->SetText(FText::FromString(AttackerName));
+		BlasterHUD->Eliminated->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 
@@ -86,7 +101,7 @@ void ABlasterPlayerController::SetHUDWeaponAmmo(const int Ammo)
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmount;
 	if (bHUDValid)
 	{
-		const FString	AmmoText = FString::Printf(TEXT("%d"), Ammo);
+		const FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmount->SetText(FText::FromString(AmmoText));
 	}
 }
@@ -99,7 +114,7 @@ void ABlasterPlayerController::SetHUDCarriedAmmo(const int Ammo)
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmount;
 	if (bHUDValid)
 	{
-		const FString	AmmoText = FString::Printf(TEXT("%d"), Ammo);
+		const FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmount->SetText(FText::FromString(AmmoText));
 	}
 }
@@ -114,7 +129,7 @@ void ABlasterPlayerController::SetHUDMatchCountdown(const float CountdownTime)
 	{
 		const int32 Minutes = FMath::FloorToInt(CountdownTime / 60.f);
 		const int32 Seconds = CountdownTime - Minutes * 60.f;
-		const FString	CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+		const FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 		BlasterHUD->CharacterOverlay->MatchCountdownText->SetText(FText::FromString(CountdownText));
 	}
 }
@@ -126,6 +141,10 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 	if (const ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(InPawn))
 	{
 		SetHUDHealth(BlasterCharacter->GetHealth(), BlasterCharacter->GetMaxHealth());
+	}
+	if (BlasterHUD)
+	{
+		BlasterHUD->Eliminated->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
