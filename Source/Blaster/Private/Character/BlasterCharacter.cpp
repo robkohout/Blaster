@@ -186,6 +186,7 @@ void ABlasterCharacter::MulticastEliminated_Implementation(const FString& Attack
 
 	// Disable character movement
 	bDisableGameplay = true;
+	GetCharacterMovement()->DisableMovement();
 
 	// Disable collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
