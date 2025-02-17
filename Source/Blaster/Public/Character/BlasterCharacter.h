@@ -43,6 +43,9 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastEliminated(const FString& AttackerName);
 	virtual void Destroyed() override;
+
+	UPROPERTY(Replicated)
+	bool bDisableGameplay = false;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -226,4 +229,6 @@ public:
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 	ECombatState GetCombatState() const;
+	FORCEINLINE UCombatComponent* GetCombatComponent() const { return Combat; }
+	FORCEINLINE bool GetDisableGameplay() const { return bDisableGameplay; }
 };

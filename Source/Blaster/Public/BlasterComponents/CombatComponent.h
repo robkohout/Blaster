@@ -28,6 +28,7 @@ public:
 	void Reload();
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
+	void FireButtonPressed(bool bPressed);
 	
 protected:
 	virtual void BeginPlay() override;
@@ -44,7 +45,6 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
 	void Fire();
-	void FireButtonPressed(bool bPressed);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);	
 
