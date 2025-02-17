@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class ABlasterGameMode;
 class UCharacterOverlay;
 class ABlasterHUD;
 
@@ -69,6 +70,9 @@ private:
 	UPROPERTY()
 	ABlasterHUD* BlasterHUD;
 
+	UPROPERTY()
+	ABlasterGameMode* BlasterGameMode;
+	
 	float LevelStartingTime = 0.f;
 	float MatchTime = 0.f;
 	float WarmupTime = 0.f;
