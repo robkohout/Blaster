@@ -176,14 +176,14 @@ void ABlasterPlayerController::SetHUDTime()
 	float TimeLeft = 0.f;
 	if (MatchState == MatchState::WaitingToStart)
 	{
-		TimeLeft = WarmupTime - GetServerTime() + LevelStartingTime;
+		TimeLeft = FMath::Clamp(WarmupTime - GetServerTime() + LevelStartingTime, 0.f, WarmupTime);
 	}
 	else if (MatchState == MatchState::InProgress)
 	{
-		TimeLeft = WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
+		TimeLeft = FMath::Clamp(WarmupTime + MatchTime - GetServerTime() + LevelStartingTime, 0.f, WarmupTime + MatchTime);
 	}
 	
-	// Horrible Hack
+	// In a packaged build, the ListenServer PlayerController BeginPlay happens before the GameMode
 	if (HasAuthority())
 	{
 		if (BlasterGameMode == nullptr)
@@ -276,15 +276,14 @@ void ABlasterPlayerController::ReceivedPlayer()
 void ABlasterPlayerController::OnMatchStateSet(const FName State)
 {
 	MatchState = State;
-
-	if (MatchState == MatchState::WaitingToStart)
-	{
-		
-	}
 	
 	if (MatchState == MatchState::InProgress)
 	{
 		HandleMatchHasStarted();
+	}
+	else if (MatchState == MatchState::Cooldown)
+	{
+		HandleCooldown();
 	}
 }
 
@@ -294,6 +293,10 @@ void ABlasterPlayerController::OnRep_MatchState()
 	if (MatchState == MatchState::InProgress)
 	{
 		HandleMatchHasStarted();
+	}
+	else if (MatchState == MatchState::Cooldown)
+	{
+		HandleCooldown();
 	}
 }
 
@@ -306,6 +309,19 @@ void ABlasterPlayerController::HandleMatchHasStarted()
 		if (BlasterHUD->Announcement)
 		{
 			BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+}
+
+void ABlasterPlayerController::HandleCooldown()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	if (BlasterHUD)
+	{
+		BlasterHUD->CharacterOverlay->RemoveFromParent();
+		if (BlasterHUD->Announcement)
+		{
+			BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
 }
