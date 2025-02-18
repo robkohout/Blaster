@@ -106,9 +106,16 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* EliminatedCharacter,
 	{
 		VictimPlayerState->AddToDefeats(1);
 	}
-	if (EliminatedCharacter && AttackerPlayerState)
+	if (EliminatedCharacter && AttackerPlayerState && VictimPlayerState)
 	{
-		EliminatedCharacter->Eliminated(AttackerPlayerState->GetPlayerName());
+		if (AttackerPlayerState == VictimPlayerState)
+		{
+			EliminatedCharacter->Eliminated(FString("Stupidity"));
+		}
+		else
+		{
+			EliminatedCharacter->Eliminated(AttackerPlayerState->GetPlayerName());
+		}
 	}
 }
 
