@@ -1,6 +1,7 @@
 // Copyright Rob Kohout
 
 #include "Weapon/Projectile.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
@@ -46,9 +47,63 @@ void AProjectile::BeginPlay()
 	}
 }
 
+void AProjectile::StartDestroyTimer()
+{
+	GetWorldTimerManager().SetTimer(
+		DestroyTimer,
+		this,
+		&ThisClass::DestroyTimerFinished,
+		DestroyTime
+		);
+}
+
+void AProjectile::DestroyTimerFinished()
+{
+	Destroy();
+}
+
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Destroy();
+}
+
+void AProjectile::SpawnTrailSystem()
+{
+	if (TrailSystem)
+	{
+		TrailSystemComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+			TrailSystem,
+			GetRootComponent(),
+			FName(),
+			GetActorLocation(),
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition,
+			false); 
+	}
+}
+
+void AProjectile::ExplodeDamage()
+{
+	APawn* FiringPawn = GetInstigator();
+	if (FiringPawn && HasAuthority())
+	{
+		if (AController* FiringController = FiringPawn->GetController())
+		{
+			UGameplayStatics::ApplyRadialDamageWithFalloff(
+				this, // world context object
+				Damage, // base damage
+				10.f, // minimum damage
+				GetActorLocation(), // origin
+				DamageInnerRadius, // inner radius
+				DamageOuterRadius, // outer radius
+				1.f, // damage falloff
+				UDamageType::StaticClass(), // damage type class
+				TArray<AActor*>(), // ignore actors
+				this, // damage causer
+				FiringController // instigator controller
+				);			
+		}
+	}
 }
 
 void AProjectile::Tick(float DeltaTime)
