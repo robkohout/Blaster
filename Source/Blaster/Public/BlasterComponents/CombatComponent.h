@@ -45,7 +45,7 @@ protected:
 	void SetHUDCrossHairs(float DeltaTime);
 	
 	UFUNCTION()
-	void OnRep_EquippedWeapon() const;
+	void OnRep_EquippedWeapon();
 	
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
@@ -62,6 +62,13 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
+
+	void DropEquippedWeapon();
+	void AttachActorToRightHand(AActor* ActorToAttach);
+	void AttachActorToLeftHand(AActor* ActorToAttach);
+	void UpdateCarriedAmmo();
+	void PlayEquipWeaponSound();
+	void ReloadEmptyWeapon();
 	
 private:
 	UPROPERTY()
