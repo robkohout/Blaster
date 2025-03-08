@@ -9,6 +9,7 @@
 #include "BlasterTypes/CombatState.h"
 #include "CombatComponent.generated.h"
 
+class AProjectile;
 class ABlasterPlayerController;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -66,6 +67,9 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AProjectile> GrenadeClass;
+	
 	void DropEquippedWeapon();
 	void AttachActorToRightHand(AActor* ActorToAttach);
 	void AttachActorToLeftHand(AActor* ActorToAttach);
