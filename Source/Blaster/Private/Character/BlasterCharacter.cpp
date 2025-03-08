@@ -171,6 +171,15 @@ void ABlasterCharacter::PlayElimMontage()
 	}
 }
 
+void ABlasterCharacter::PlayThrowGrenadeMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ThrowGrenadeMontage)
+	{
+		AnimInstance->Montage_Play(ThrowGrenadeMontage);
+	}
+}
+
 void ABlasterCharacter::Eliminated(const FString& AttackerName)
 {
 	if (Combat && Combat->EquippedWeapon)
@@ -287,6 +296,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::JumpButtonPressed);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ThisClass::EquipButtonPressed);
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ThisClass::ReloadButtonPressed);
+		EnhancedInputComponent->BindAction(ThrowGrenadeAction, ETriggerEvent::Triggered, this, &ThisClass::GrenadeButtonPressed);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ThisClass::CrouchButtonPressed);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &ThisClass::CrouchButtonReleased);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &ThisClass::AimButtonPressed);
@@ -351,6 +361,14 @@ void ABlasterCharacter::ReloadButtonPressed()
 	if (Combat)
 	{
 		Combat->Reload();
+	}
+}
+
+void ABlasterCharacter::GrenadeButtonPressed()
+{
+	if (Combat)
+	{
+		Combat->ThrowGrenade();
 	}
 }
 

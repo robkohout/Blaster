@@ -39,6 +39,7 @@ public:
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
 	void PlayElimMontage();
+	void PlayThrowGrenadeMontage();
 	void Eliminated(const FString& AttackerName);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastEliminated(const FString& AttackerName);
@@ -60,6 +61,7 @@ protected:
 	void JumpButtonPressed();
 	void EquipButtonPressed();
 	void ReloadButtonPressed();
+	void GrenadeButtonPressed();
 	void CrouchButtonPressed();
 	void CrouchButtonReleased();
 	void AimButtonPressed();
@@ -100,6 +102,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* ReloadAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* ThrowGrenadeAction;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* CrouchAction;
@@ -148,6 +153,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	UAnimMontage* ElimMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	UAnimMontage* ThrowGrenadeMontage;
 	
 	void HideCharacterIfCameraClose();
 
