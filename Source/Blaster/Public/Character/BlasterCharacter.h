@@ -22,6 +22,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class ABlasterPlayerController;
 class USoundCue;
+class UBuffComponent;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
@@ -127,6 +128,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCombatComponent* Combat;
 
+	UPROPERTY(VisibleAnywhere)
+	UBuffComponent* Buff;
+	
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
 
