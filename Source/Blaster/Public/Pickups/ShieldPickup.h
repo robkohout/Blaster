@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Pickups/Pickup.h"
-#include "HealthPickup.generated.h"
+#include "ShieldPickup.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BLASTER_API AHealthPickup : public APickup
+class BLASTER_API AShieldPickup : public APickup
 {
 	GENERATED_BODY()
 	
@@ -25,8 +25,8 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float HealAmount = 100.f;
+	float ShieldReplenishAmount = 100.f;
 
 	UPROPERTY(EditAnywhere)
-	float HealingTime = 5.f;
+	float ShieldReplenishTime = 5.f;
 };
