@@ -76,7 +76,6 @@ private:
 
 	UPROPERTY()
 	ABlasterGameMode* BlasterGameMode;
-	
 	float LevelStartingTime = 0.f;
 	float MatchTime = 0.f;
 	float WarmupTime = 0.f;
@@ -104,4 +103,8 @@ private:
 	bool bInitializeDefeats = false;
 	int32 HUDGrenades;
 	bool bInitializeGrenades = false;
+	float HUDCarriedAmmo;
+	bool bInitializeCarriedAmmo = false;
+	float HUDWeaponAmmo;
+	bool bInitializeWeaponAmo = false;
 };
