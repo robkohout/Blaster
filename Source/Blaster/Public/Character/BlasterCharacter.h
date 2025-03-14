@@ -77,7 +77,9 @@ protected:
 	void FireButtonReleased();
 	void PlayHitReactMontage();
 	void AimOffset(float DeltaTime);
-		
+	void DropOrDestroyWeapon(AWeapon* Weapon);
+	void DropOrDestroyWeapons();
+	
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
 	
