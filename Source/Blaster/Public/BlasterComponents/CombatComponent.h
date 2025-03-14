@@ -24,6 +24,9 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	void EquipWeapon(class AWeapon* WeaponToEquip);
+	void SwapWeapons();
+	bool ShouldSwapWeapons();
+	
 	void Reload();
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
