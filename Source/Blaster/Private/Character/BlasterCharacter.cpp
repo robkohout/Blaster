@@ -54,7 +54,8 @@ ABlasterCharacter::ABlasterCharacter()
 	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
-
+	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+	
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 	NetUpdateFrequency = 100.f;
 	MinNetUpdateFrequency = 50.f;
@@ -758,4 +759,9 @@ FVector ABlasterCharacter::GetHitTarget() const
 ECombatState ABlasterCharacter::GetCombatState() const
 {
 	return Combat ? Combat->CombatState : ECombatState::ECS_MAX;
+}
+
+bool ABlasterCharacter::bIsLocallyReloading()
+{
+	return Combat ? Combat->bLocallyReloading : false;
 }

@@ -46,6 +46,8 @@ public:
 	void ServerLaunchGrenade(const FVector_NetQuantize& Target);
 
 	void PickupAmmo(EWeaponType WeaponType, int32 AmmoAmmount);
+
+	bool bLocallyReloading = false;
 	
 protected:
 	virtual void BeginPlay() override;
