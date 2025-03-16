@@ -70,7 +70,6 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AWeapon, WeaponState);
-	DOREPLIFETIME(AWeapon, Ammo);
 }
 
 void AWeapon::ShowPickupWidget(bool bShowWidget)
@@ -199,6 +198,42 @@ void AWeapon::SpendRound()
 {
 	Ammo = FMath::Clamp(Ammo - 1, 0, MagCapacity);
 	SetHUDAmmo();
+	if (HasAuthority())
+	{
+		ClientUpdateAmmo(Ammo);
+	}
+	else if (BlasterOwnerCharacter && BlasterOwnerCharacter->IsLocallyControlled())
+	{
+		++Sequence;
+	}
+}
+
+void AWeapon::ClientUpdateAmmo_Implementation(int32 ServerAmmo)
+{
+	if (HasAuthority()) return;
+	Ammo = ServerAmmo;
+	--Sequence;
+	Ammo -= Sequence;
+	SetHUDAmmo();
+}
+
+void AWeapon::AddAmmo(int32 AmmoToAdd)
+{
+	Ammo = FMath::Clamp(Ammo + AmmoToAdd, 0, MagCapacity);
+	SetHUDAmmo();
+	ClientAddAmmo(AmmoToAdd);
+}
+
+void AWeapon::ClientAddAmmo_Implementation(int32 AmmoToAdd)
+{
+	if (HasAuthority()) return;
+	Ammo = FMath::Clamp(Ammo + AmmoToAdd, 0, MagCapacity);
+	BlasterOwnerCharacter = BlasterOwnerCharacter == nullptr ? Cast<ABlasterCharacter>(GetOwner()) : BlasterOwnerCharacter;
+	if (BlasterOwnerCharacter && BlasterOwnerCharacter->GetCombatComponent() && IsFull())
+	{
+		BlasterOwnerCharacter->GetCombatComponent()->JumpToShotgunEnd();
+	}
+	SetHUDAmmo();
 }
 
 bool AWeapon::IsEmpty()
@@ -210,17 +245,6 @@ bool AWeapon::IsFull()
 {
 	return Ammo == MagCapacity;
 }
-
-void AWeapon::OnRep_Ammo()
-{
-	BlasterOwnerCharacter = BlasterOwnerCharacter == nullptr ? Cast<ABlasterCharacter>(GetOwner()) : BlasterOwnerCharacter;
-	if (BlasterOwnerCharacter && BlasterOwnerCharacter->GetCombatComponent() && IsFull())
-	{
-		BlasterOwnerCharacter->GetCombatComponent()->JumpToShotgunEnd();
-	}
-	SetHUDAmmo();
-}
-
 
 void AWeapon::OnRep_Owner()
 {
@@ -262,10 +286,7 @@ void AWeapon::Fire(const FVector& HitTarget)
 			}
 		}
 	}
-	if (HasAuthority())
-	{
-		SpendRound();	
-	}
+	SpendRound();	
 }
 
 void AWeapon::Dropped()
@@ -276,12 +297,6 @@ void AWeapon::Dropped()
 	SetOwner(nullptr);
 	BlasterOwnerCharacter = nullptr;
 	BlasterOwnerController = nullptr;
-}
-
-void AWeapon::AddAmmo(int32 AmmoToAdd)
-{
-	Ammo = FMath::Clamp(Ammo - AmmoToAdd, 0, MagCapacity);
-	SetHUDAmmo();
 }
 
 FVector AWeapon::TraceEndWithScatter(const FVector& HitTarget)
