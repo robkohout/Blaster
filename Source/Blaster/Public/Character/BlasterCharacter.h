@@ -59,6 +59,9 @@ public:
 	void UpdateHUDAmmo();
 	
 	void SpawnDefaultWeapon();
+
+	UPROPERTY()
+	TMap<FName, UBoxComponent*> HitCollisionBoxes;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -145,7 +148,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* foot_r;
-	
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	USpringArmComponent* CameraBoom;
