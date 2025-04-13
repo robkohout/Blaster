@@ -69,7 +69,7 @@ FServerSideRewindResult ULagCompensationComponent::ConfirmHit(const FFramePackag
 	if (HitCharacter == nullptr) return FServerSideRewindResult();
 
 	FFramePackage CurrentFrame;
-	CacheBoxPositions(Character, CurrentFrame);
+	CacheBoxPositions(HitCharacter, CurrentFrame);
 	MoveBoxes(HitCharacter, Package);
 	EnableCharacterMeshCollision(HitCharacter, ECollisionEnabled::NoCollision);
 
@@ -88,8 +88,26 @@ FServerSideRewindResult ULagCompensationComponent::ConfirmHit(const FFramePackag
 				TraceStart,
 				TraceEnd,
 				ECollisionChannel::ECC_Visibility);
+		/*
+		UKismetSystemLibrary::DrawDebugLine(
+			GetWorld(),
+			TraceStart,
+			TraceEnd,
+			FLinearColor::Red, 4.f, 1.f);
+		ShowFramePackage(Package, FColor::Orange);
+		*/		
 		if (ConfirmHitResult.bBlockingHit)
 		{
+			/*
+			DrawDebugSphere(
+			GetWorld(),
+			ConfirmHitResult.ImpactPoint,
+			16.f,
+			12,
+			FColor::Red,
+			false,
+			4.f);
+			*/
 			// we hit the head, return early
 			ResetHitBoxes(HitCharacter, CurrentFrame);
 			EnableCharacterMeshCollision(HitCharacter, ECollisionEnabled::QueryAndPhysics);
@@ -113,6 +131,16 @@ FServerSideRewindResult ULagCompensationComponent::ConfirmHit(const FFramePackag
 				ECollisionChannel::ECC_Visibility);
 			if (ConfirmHitResult.bBlockingHit)
 			{
+				/*
+				DrawDebugSphere(
+				GetWorld(),
+				ConfirmHitResult.ImpactPoint,
+				16.f,
+				12,
+				FColor::Red,
+				false,
+				4.f);
+				*/
 				ResetHitBoxes(HitCharacter, CurrentFrame);
 				EnableCharacterMeshCollision(HitCharacter, ECollisionEnabled::QueryAndPhysics);
 				return FServerSideRewindResult{true, false};
