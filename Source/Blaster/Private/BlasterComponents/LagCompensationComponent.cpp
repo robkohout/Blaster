@@ -151,8 +151,7 @@ FShotgunServerSideRewindResult ULagCompensationComponent::ShotgunConfirmHit(cons
 		MoveBoxes(Frame.Character, Frame);
 		EnableCharacterMeshCollision(Frame.Character, ECollisionEnabled::NoCollision);
 		CurrentFrames.Add(CurrentFrame);
-		
-		ShowFramePackage(Frame, FColor::Orange);
+		//ShowFramePackage(Frame, FColor::Orange);
 	}
 
 	for (auto& Frame : FramePackages)
@@ -182,12 +181,13 @@ FShotgunServerSideRewindResult ULagCompensationComponent::ShotgunConfirmHit(cons
 			ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ConfirmHitResult.GetActor());
 			if (BlasterCharacter)
 			{
+				/*
 				UKismetSystemLibrary::DrawDebugLine(
 				World,
 				TraceStart,
 				TraceEnd,
 				FLinearColor::Red, 4.f, 1.f);
-				
+				*/
 				if (ShotgunResult.HeadShots.Contains(BlasterCharacter))
 				{
 					ShotgunResult.HeadShots[BlasterCharacter]++;
@@ -222,12 +222,13 @@ FShotgunServerSideRewindResult ULagCompensationComponent::ShotgunConfirmHit(cons
 		const FVector TraceEnd = TraceStart + (HitLocation - TraceStart) * 1.25f;
 		if (World)
 		{
+			/*
 			World->LineTraceSingleByChannel(
 				ConfirmHitResult,
 				TraceStart,
 				TraceEnd,
 				ECollisionChannel::ECC_Visibility);
-					
+			*/		
 			ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ConfirmHitResult.GetActor());
 			if (BlasterCharacter)
 			{
@@ -404,7 +405,7 @@ FFramePackage ULagCompensationComponent::GetFrameToCheck(ABlasterCharacter* HitC
 		// Interpolate between Younger and Older
 		FrameToCheck = InterpBetweenFrames(Older->GetValue(), Younger->GetValue(), HitTime);
 	}
-	
+	FrameToCheck.Character = HitCharacter;
 	return FrameToCheck;	
 }
 
@@ -433,14 +434,14 @@ void ULagCompensationComponent::ShotgunServerScoreRequest_Implementation(
 	{
 		if (HitCharacter == nullptr || Character == nullptr || Character->GetEquippedWeapon() == nullptr) continue;
 		float TotalDamage = 0.f;
-		if ( Confirm.HeadShots.Contains(Character) )
+		if ( Confirm.HeadShots.Contains(HitCharacter) )
 		{
-			float HeadShotDamage = Confirm.HeadShots[Character] * Character->GetEquippedWeapon()->GetDamage();
+			float HeadShotDamage = Confirm.HeadShots[HitCharacter] * Character->GetEquippedWeapon()->GetDamage();
 			TotalDamage += HeadShotDamage;
 		}
-		if ( Confirm.BodyShots.Contains(Character) )
+		if ( Confirm.BodyShots.Contains(HitCharacter) )
 		{
-			float BodyShotDamage = Confirm.BodyShots[Character] * Character->GetEquippedWeapon()->GetDamage();
+			float BodyShotDamage = Confirm.BodyShots[HitCharacter] * Character->GetEquippedWeapon()->GetDamage();
 			TotalDamage += BodyShotDamage;
 		}
 		UGameplayStatics::ApplyDamage(
