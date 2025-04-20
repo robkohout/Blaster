@@ -95,7 +95,8 @@ public:
 		const FVector_NetQuantize& TraceStart,
 		const TArray<FVector_NetQuantize>& HitLocations,
 		float HitTime);
-	
+
+	// HitScan
 	UFUNCTION(Server, Reliable)
 	void ServerScoreRequest(
 		ABlasterCharacter* HitCharacter,
@@ -104,6 +105,16 @@ public:
 		float HitTime,
 		AWeapon* DamageCauser);
 
+	// Projectile
+	UFUNCTION(Server, Reliable)
+	void ProjectileServerScoreRequest(
+		ABlasterCharacter* HitCharacter,
+		const FVector_NetQuantize& TraceStart,
+		const FVector_NetQuantize100& InitialVelocity,
+		float HitTime);
+	
+	
+	// Shotgun
 	UFUNCTION(Server, Reliable)
 	void ShotgunServerScoreRequest(
 		const TArray<ABlasterCharacter*>& HitCharacters,
