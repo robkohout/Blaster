@@ -39,10 +39,16 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
 	virtual void Restart() override;
+
+	/*
+	 * Play Montages
+	 */
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
 	void PlayElimMontage();
 	void PlayThrowGrenadeMontage();
+	void PlaySwapMontage();
+	
 	void Eliminated(const FString& AttackerName);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastEliminated(const FString& AttackerName);
@@ -62,6 +68,8 @@ public:
 
 	UPROPERTY()
 	TMap<FName, UBoxComponent*> HitCollisionBoxes;
+
+	bool bFinishedSwapping = false;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -238,6 +246,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	UAnimMontage* ThrowGrenadeMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	UAnimMontage* SwapMontage;
 	
 	void HideCharacterIfCameraClose();
 

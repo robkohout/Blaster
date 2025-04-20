@@ -242,7 +242,26 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 void UCombatComponent::SwapWeapons()
 {
-	if (CombatState != ECombatState::ECS_Unoccupied) return;
+	if (CombatState != ECombatState::ECS_Unoccupied || Character == nullptr || !Character->HasAuthority()) return;
+
+	Character->PlaySwapMontage();
+	CombatState = ECombatState::ECS_SwappingWeapons;
+	Character->bFinishedSwapping = false;
+	if (SecondaryWeapon) SecondaryWeapon->EnableCustomDepth(false);
+}
+
+void UCombatComponent::FinishSwap()
+{
+	if (Character && Character->HasAuthority())
+	{
+		CombatState = ECombatState::ECS_Unoccupied;
+	}
+	if (Character) Character->bFinishedSwapping = true;
+	if (SecondaryWeapon) SecondaryWeapon->EnableCustomDepth(true);
+}
+
+void UCombatComponent::FinishSwapAttachWeapons()
+{
 	AWeapon* TempWeapon = EquippedWeapon;
 	EquippedWeapon = SecondaryWeapon;
 	SecondaryWeapon = TempWeapon;
@@ -578,6 +597,12 @@ void UCombatComponent::OnRep_CombatState()
 				ShowAttachedGrenade(true);
 			}
 			break;
+		case ECombatState::ECS_SwappingWeapons:
+			if (Character && !Character->IsLocallyControlled())
+			{
+				Character->PlaySwapMontage();
+			}
+			break;
 		default:
 			break;
 	}
@@ -784,8 +809,8 @@ void UCombatComponent::OnRep_Aiming()
 bool UCombatComponent::CanFire() const
 {
 	if (EquippedWeapon == nullptr) return false;
-	if (bLocallyReloading) return false;
 	if (!EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Reloading && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_Shotgun) return true;
+	if (bLocallyReloading) return false;
 	return !EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Unoccupied;
 }
 
