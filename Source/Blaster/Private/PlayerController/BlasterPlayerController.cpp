@@ -1,6 +1,7 @@
 // Copyright Rob Kohout
 
 #include "PlayerController/BlasterPlayerController.h"
+#include "EnhancedInputComponent.h"
 #include "BlasterComponents/CombatComponent.h"
 #include "Character/BlasterCharacter.h"
 #include "Components/Image.h"
@@ -13,6 +14,7 @@
 #include "HUD/BlasterHUD.h"
 #include "HUD/CharacterOverlay.h"
 #include "HUD/Eliminated.h"
+#include "HUD/ReturnToMainMenu.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "PlayerState/BlasterPlayerState.h"
@@ -78,6 +80,27 @@ void ABlasterPlayerController::CheckPing(float DeltaTime)
 		if (PingAnimationRunningTime > HighPingDuration)
 		{
 			StopHighPingWarning();
+		}
+	}
+}
+
+void ABlasterPlayerController::ShowReturnToMainMenu()
+{
+	if (ReturnToMainMenuWidget == nullptr) return;
+	if (ReturnToMainMenu == nullptr)
+	{
+		ReturnToMainMenu = CreateWidget<UReturnToMainMenu>(this, ReturnToMainMenuWidget);
+	}
+	if (ReturnToMainMenu)
+	{
+		bReturnToMainMenuOpen = !bReturnToMainMenuOpen;
+		if (bReturnToMainMenuOpen)
+		{
+			ReturnToMainMenu->MenuSetup();
+		}
+		else
+		{
+			ReturnToMainMenu->MenuTeardown();
 		}
 	}
 }
@@ -362,6 +385,16 @@ void ABlasterPlayerController::PollInit()
 				}
 			}
 		}
+	}
+}
+
+void ABlasterPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+	if (InputComponent == nullptr) return;
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent))
+	{
+		EnhancedInputComponent->BindAction(QuitAction, ETriggerEvent::Triggered, this, &ThisClass::ShowReturnToMainMenu);
 	}
 }
 

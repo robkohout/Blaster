@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class UReturnToMainMenu;
+class UInputAction;
 class ABlasterGameMode;
 class UCharacterOverlay;
 class ABlasterHUD;
@@ -49,6 +51,8 @@ protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
 	void PollInit();
+
+	virtual void SetupInputComponent() override;
 	
 	/*
 	 * Sync time between client and server
@@ -79,11 +83,28 @@ protected:
 	void HighPingWarning();
 	void StopHighPingWarning();
 	void CheckPing(float DeltaTime);
+
+	void ShowReturnToMainMenu();
 	
 private:
 	UPROPERTY()
 	ABlasterHUD* BlasterHUD;
 
+	/*
+	 * Return to Main Menu
+	 */
+
+	UPROPERTY(EditAnywhere, Category = "HUD")
+	TSubclassOf<UUserWidget> ReturnToMainMenuWidget;
+
+	UPROPERTY()
+	UReturnToMainMenu* ReturnToMainMenu;
+
+	bool bReturnToMainMenuOpen = false;
+	
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* QuitAction;
+	
 	UPROPERTY()
 	ABlasterGameMode* BlasterGameMode;
 	float LevelStartingTime = 0.f;
