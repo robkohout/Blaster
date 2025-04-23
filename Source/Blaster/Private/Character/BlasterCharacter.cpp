@@ -312,23 +312,22 @@ void ABlasterCharacter::PlaySwapMontage()
 	}
 }
 
-void ABlasterCharacter::Eliminated(const FString& AttackerName)
+void ABlasterCharacter::Eliminated(const FString& AttackerName, bool bPlayerLeftGame)
 {
 	DropOrDestroyWeapons();
-	MulticastEliminated(AttackerName);
-	GetWorldTimerManager().SetTimer(
-		EliminatedTimer,
-		this,
-		&ThisClass::EliminatedTimerFinished,
-		EliminatedDelay);
+	MulticastEliminated(AttackerName, bPlayerLeftGame);
 }
 
-void ABlasterCharacter::MulticastEliminated_Implementation(const FString& AttackerName)
+void ABlasterCharacter::MulticastEliminated_Implementation(const FString& AttackerName, bool bPlayerLeftGame)
 {
+	bLeftGame = bPlayerLeftGame;
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDWeaponAmmo(0);
-		BlasterPlayerController->SetHUDEliminated(AttackerName);
+		if (!bPlayerLeftGame)
+		{
+			BlasterPlayerController->SetHUDEliminated(AttackerName);
+		}
 	}
 	bEliminated = true;
 	PlayElimMontage();
@@ -373,14 +372,33 @@ void ABlasterCharacter::MulticastEliminated_Implementation(const FString& Attack
 	{
 		ShowSniperScopeWidget(false);
 	}
+	GetWorldTimerManager().SetTimer(
+		EliminatedTimer,
+		this,
+		&ThisClass::EliminatedTimerFinished,
+		EliminatedDelay);
 }
 
 void ABlasterCharacter::EliminatedTimerFinished()
 {
 	ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>();
-	if (BlasterGameMode)
+	if (BlasterGameMode && !bLeftGame)
 	{
 		BlasterGameMode->RequestRespawn(this, Controller);
+	}
+	if (bLeftGame && IsLocallyControlled())
+	{
+		OnLeftGame.Broadcast();
+	}
+}
+
+void ABlasterCharacter::ServerLeaveGame_Implementation()
+{
+	ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>();
+	BlasterPlayerState = BlasterPlayerState == nullptr ? GetPlayerState<ABlasterPlayerState>() : BlasterPlayerState;
+	if (BlasterGameMode && BlasterPlayerState)
+	{
+		BlasterGameMode->PlayerLeftGame(BlasterPlayerState);
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "PlayerController/BlasterPlayerController.h"
 #include "BlasterGameMode.generated.h"
 
+class ABlasterPlayerState;
 class ABlasterPlayerController;
 class ABlasterCharacter;
 
@@ -30,7 +31,8 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	virtual void RequestRespawn(ACharacter* EliminatedCharacter, AController* EliminatedController);
-
+	void PlayerLeftGame(ABlasterPlayerState* PlayerLeaving);
+	
 	UPROPERTY(EditDefaultsOnly)
 	float WarmupTime = 10.f;
 
