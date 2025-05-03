@@ -6,6 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "BlasterComponents/CombatComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
@@ -19,6 +21,7 @@
 #include "BlasterComponents/LagCompensationComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameMode/BlasterGameMode.h"
+#include "GameState/BlasterGameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "PlayerController/BlasterPlayerController.h"
@@ -191,6 +194,35 @@ void ABlasterCharacter::PostInitializeComponents()
 		{
 			LagCompensation->Controller = Cast<ABlasterPlayerController>(Controller);
 		}
+	}
+}
+
+void ABlasterCharacter::MulticastGainedTheLead_Implementation()
+{
+	if (CrownSystem == nullptr) return;
+
+	if (!IsValid(CrownComponent))
+	{
+		CrownComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+			CrownSystem,
+			GetCapsuleComponent(),
+			FName("Crown"),
+			GetActorLocation() + FVector(0.f, 0.f, 110.f),
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition,
+			false);	
+	}
+	if (CrownComponent)
+	{
+		CrownComponent->Activate();
+	}
+}
+
+void ABlasterCharacter::MulticastLostTheLead_Implementation()
+{
+	if (CrownComponent)
+	{
+		CrownComponent->DestroyComponent();
 	}
 }
 
@@ -371,6 +403,10 @@ void ABlasterCharacter::MulticastEliminated_Implementation(const FString& Attack
 	if (bHideSniperScope)
 	{
 		ShowSniperScopeWidget(false);
+	}
+	if (CrownComponent)
+	{
+		CrownComponent->DestroyComponent();
 	}
 	GetWorldTimerManager().SetTimer(
 		EliminatedTimer,
@@ -836,6 +872,12 @@ void ABlasterCharacter::PollInit()
 		{
 			BlasterPlayerState->AddToScore(0.f);
 			BlasterPlayerState->AddToDefeats(0);
+
+			ABlasterGameState* BlasterGameState = Cast<ABlasterGameState>(UGameplayStatics::GetGameState(this));
+			if (BlasterGameState && BlasterGameState->TopScoringPlayers.Contains(BlasterPlayerState))
+			{
+				MulticastGainedTheLead();
+			}
 		}
 	}
 }

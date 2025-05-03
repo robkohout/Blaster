@@ -192,8 +192,8 @@ FServerSideRewindResult ULagCompensationComponent::ProjectileConfirmHit(const FF
 	PathParams.ProjectileRadius = 5.f;
 	PathParams.TraceChannel = ECC_HitBox;
 	PathParams.ActorsToIgnore.Add(GetOwner());
-	PathParams.DrawDebugTime = 5.f;
-	PathParams.DrawDebugType = EDrawDebugTrace::ForDuration;
+	//PathParams.DrawDebugTime = 5.f;
+	//PathParams.DrawDebugType = EDrawDebugTrace::ForDuration;
 	
 	FPredictProjectilePathResult PathResult;
 	UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);
@@ -201,7 +201,7 @@ FServerSideRewindResult ULagCompensationComponent::ProjectileConfirmHit(const FF
 	if (PathResult.HitResult.bBlockingHit)
 	{
 		// we hit the head, return early
-		
+		/*
 		if (PathResult.HitResult.Component.IsValid())
 		{
 			UBoxComponent* Box = Cast<UBoxComponent>(PathResult.HitResult.Component);
@@ -215,7 +215,7 @@ FServerSideRewindResult ULagCompensationComponent::ProjectileConfirmHit(const FF
 					FColor::Red, false, 8.f);
 			}
 		}
-		
+		*/
 		ResetHitBoxes(HitCharacter, CurrentFrame);
 		EnableCharacterMeshCollision(HitCharacter, ECollisionEnabled::QueryAndPhysics);
 		return FServerSideRewindResult{true, true};
@@ -235,6 +235,7 @@ FServerSideRewindResult ULagCompensationComponent::ProjectileConfirmHit(const FF
 		UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);
 		if (PathResult.HitResult.bBlockingHit)
 		{
+			/*
 			if (PathResult.HitResult.Component.IsValid())
 			{
 				UBoxComponent* Box = Cast<UBoxComponent>(PathResult.HitResult.Component);
@@ -248,7 +249,7 @@ FServerSideRewindResult ULagCompensationComponent::ProjectileConfirmHit(const FF
 						FColor::Blue, false, 8.f);
 				}
 			}
-			
+			*/
 			ResetHitBoxes(HitCharacter, CurrentFrame);
 			EnableCharacterMeshCollision(HitCharacter, ECollisionEnabled::QueryAndPhysics);
 			return FServerSideRewindResult{true, false};

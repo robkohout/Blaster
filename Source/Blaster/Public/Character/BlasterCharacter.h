@@ -11,6 +11,8 @@
 #include "Interfaces/InteractWithCrosshairsInterface.h"
 #include "BlasterCharacter.generated.h"
 
+class UNiagaraSystem;
+class UNiagaraComponent;
 class ULagCompensationComponent;
 class UBoxComponent;
 class ABlasterPlayerState;
@@ -76,6 +78,12 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void ServerLeaveGame();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastGainedTheLead();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastLostTheLead();
 	
 protected:
 	virtual void BeginPlay() override;
@@ -325,7 +333,7 @@ private:
 	UMaterialInstance* DissolveMaterialInstance;
 
 	/*
-	 * Elim bot
+	 * Elim effects
 	 */
 
 	UPROPERTY(EditAnywhere)
@@ -339,7 +347,13 @@ private:
 
 	UPROPERTY()
 	ABlasterPlayerState* BlasterPlayerState;
+	
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* CrownSystem;
 
+	UPROPERTY()
+	UNiagaraComponent* CrownComponent;
+	
 	/*
 	 * Grenade
 	 */
