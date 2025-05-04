@@ -47,6 +47,8 @@ public:
 
 	FHighPingDelegate HighPingDelegate;
 	
+	void BroadcastElim(APlayerState* Attacker, APlayerState* Victim);
+	
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
@@ -85,6 +87,9 @@ protected:
 	void CheckPing(float DeltaTime);
 
 	void ShowReturnToMainMenu();
+
+	UFUNCTION(Client, Reliable)
+	void ClientElimAnnouncement(APlayerState* Attacker, APlayerState* Victim);
 	
 private:
 	UPROPERTY()

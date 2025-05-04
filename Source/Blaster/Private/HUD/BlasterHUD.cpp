@@ -4,6 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "HUD/Announcement.h"
 #include "HUD/CharacterOverlay.h"
+#include "HUD/ElimAnnouncement.h"
 #include "HUD/Eliminated.h"
 
 void ABlasterHUD::DrawHUD()
@@ -64,10 +65,10 @@ void ABlasterHUD::AddCharacterOverlay()
 
 void ABlasterHUD::AddAnnouncement()
 {
-	APlayerController* PlayerController = GetOwningPlayerController();
-	if (PlayerController && AnnouncementClass)
+	OwningPlayer = OwningPlayer == nullptr ? GetOwningPlayerController() : OwningPlayer;
+	if (OwningPlayer && AnnouncementClass)
 	{
-		Announcement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
+		Announcement = CreateWidget<UAnnouncement>(OwningPlayer, AnnouncementClass);
 		Announcement->AddToViewport();
 	}
 }
@@ -75,12 +76,26 @@ void ABlasterHUD::AddAnnouncement()
 
 void ABlasterHUD::AddEliminated()
 {
-	APlayerController* PlayerController = GetOwningPlayerController();
-	if (PlayerController && EliminatedClass)
+	OwningPlayer = OwningPlayer == nullptr ? GetOwningPlayerController() : OwningPlayer;
+	if (OwningPlayer && EliminatedClass)
 	{
-		Eliminated = CreateWidget<UEliminated>(PlayerController, EliminatedClass);
+		Eliminated = CreateWidget<UEliminated>(OwningPlayer, EliminatedClass);
 		Eliminated->AddToViewport();
 		Eliminated->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
+void ABlasterHUD::AddElimAnnouncement(FString Attacker, FString Victim)
+{
+	OwningPlayer = OwningPlayer == nullptr ? GetOwningPlayerController() : OwningPlayer;
+	if (OwningPlayer && ElimAnnouncementClass)
+	{
+		UElimAnnouncement* ElimAnnouncementWidget = CreateWidget<UElimAnnouncement>(OwningPlayer, ElimAnnouncementClass);
+		if (ElimAnnouncementWidget)
+		{
+			ElimAnnouncementWidget->SetElimAnnouncementText(Attacker, Victim);
+			ElimAnnouncementWidget->AddToViewport();
+		}
 	}
 }
 
