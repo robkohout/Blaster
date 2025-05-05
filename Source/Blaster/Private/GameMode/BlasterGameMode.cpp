@@ -75,6 +75,7 @@ void ABlasterGameMode::PostLogin(APlayerController* NewPlayer)
 
 	if(GEngine)
 	{
+		/*
 		APlayerState* PlayerState = NewPlayer->GetPlayerState<APlayerState>();
 		if(PlayerState)
 		{
@@ -87,6 +88,7 @@ void ABlasterGameMode::PostLogin(APlayerController* NewPlayer)
 				FString::Printf(TEXT("%s has joined the game!"), *PlayerName)
 				);
 		}
+		*/
 	}
 }
 
