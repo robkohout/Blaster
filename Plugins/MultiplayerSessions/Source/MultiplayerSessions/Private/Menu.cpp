@@ -75,6 +75,7 @@ void UMenu::OnCreateSession(bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
+		/*
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(
@@ -83,7 +84,7 @@ void UMenu::OnCreateSession(bool bWasSuccessful)
 				FString(TEXT("Session Created Successfully"))
 			);
 		}
-
+		*/
 		UWorld* World = GetWorld();
 		if (World)
 		{
@@ -97,6 +98,7 @@ void UMenu::OnCreateSession(bool bWasSuccessful)
 	}
 	else
 	{
+		/*
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(
@@ -105,6 +107,7 @@ void UMenu::OnCreateSession(bool bWasSuccessful)
 				FString(TEXT("Failed to create session!"))
 			);
 		}
+		*/
 		HostButton->SetIsEnabled(true);
 	}
 }
@@ -159,6 +162,7 @@ void UMenu::OnDestroySession(bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
+		/*
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(
@@ -166,6 +170,7 @@ void UMenu::OnDestroySession(bool bWasSuccessful)
 				FColor::Red,
 				FString::Printf(TEXT("Session Destroyed Successfully")));
 		}
+		*/
 	}
 }
 
@@ -173,6 +178,7 @@ void UMenu::OnStartSession(bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
+		/*
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(
@@ -180,6 +186,7 @@ void UMenu::OnStartSession(bool bWasSuccessful)
 				FColor::Yellow, 
 				FString::Printf(TEXT("Session Started Successfully")));
 		}
+		*/
 	}
 }
 
