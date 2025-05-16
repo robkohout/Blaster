@@ -12,6 +12,7 @@ void ABlasterPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimePrope
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABlasterPlayerState, Defeats);
+	DOREPLIFETIME(ABlasterPlayerState, Team);
 }
 
 void ABlasterPlayerState::OnRep_Score()
