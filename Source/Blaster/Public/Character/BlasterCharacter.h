@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "BlasterTypes/CombatState.h"
+#include "BlasterTypes/Team.h"
 #include "BlasterTypes/TurningInPlace.h"
 #include "Components/TimelineComponent.h"
 #include "Interfaces/InteractWithCrosshairsInterface.h"
@@ -84,6 +85,8 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastLostTheLead();
+
+	void SetTeamColor(ETeam Team);
 	
 protected:
 	virtual void BeginPlay() override;
@@ -329,9 +332,28 @@ private:
 	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
 
 	// Material instance set on the Blueprint, used with the dynamic material instance
-	UPROPERTY(EditAnywhere, Category="Eliminated")
+	UPROPERTY(VisibleAnywhere, Category="Eliminated")
 	UMaterialInstance* DissolveMaterialInstance;
 
+	/*
+	 * Team colors
+	 */
+	
+	UPROPERTY(EditAnywhere, Category="Eliminated")
+	UMaterialInstance* RedDissolveMatInst;
+
+	UPROPERTY(EditAnywhere, Category="Eliminated")
+	UMaterialInstance* RedMaterial;
+
+	UPROPERTY(EditAnywhere, Category="Eliminated")
+	UMaterialInstance* BlueDissolveMatInst;
+
+	UPROPERTY(EditAnywhere, Category="Eliminated")
+	UMaterialInstance* BlueMaterial;
+
+	UPROPERTY(EditAnywhere, Category="Eliminated")
+	UMaterialInstance* OriginalMaterial;
+	
 	/*
 	 * Elim effects
 	 */
