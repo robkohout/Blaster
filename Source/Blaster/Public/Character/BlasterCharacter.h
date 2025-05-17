@@ -12,6 +12,7 @@
 #include "Interfaces/InteractWithCrosshairsInterface.h"
 #include "BlasterCharacter.generated.h"
 
+class ABlasterGameMode;
 class UNiagaraSystem;
 class UNiagaraComponent;
 class ULagCompensationComponent;
@@ -389,6 +390,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AWeapon> DefaultWeaponClass;
+
+	UPROPERTY()
+	ABlasterGameMode* BlasterGameMode;
 	
 public:
 	void SetOverlappingWeapon(class AWeapon* Weapon);

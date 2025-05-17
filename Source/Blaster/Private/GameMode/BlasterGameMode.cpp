@@ -92,6 +92,11 @@ void ABlasterGameMode::PostLogin(APlayerController* NewPlayer)
 	}
 }
 
+float ABlasterGameMode::CalculateDamage(AController* Attacker, AController* Victim, float BaseDamage)
+{
+	return BaseDamage;	
+}
+
 void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* EliminatedCharacter,
 	ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
 {
