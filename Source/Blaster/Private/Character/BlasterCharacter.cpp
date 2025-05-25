@@ -976,3 +976,8 @@ bool ABlasterCharacter::bIsLocallyReloading()
 {
 	return Combat ? Combat->bLocallyReloading : false;
 }
+
+bool ABlasterCharacter::IsHoldingTheFlag() const
+{
+	return Combat ? Combat->bHoldingTheFlag : false;
+}
