@@ -110,6 +110,8 @@ protected:
 	void AimOffset(float DeltaTime);
 	void DropOrDestroyWeapon(AWeapon* Weapon);
 	void DropOrDestroyWeapons();
+	void SetSpawnPoint();
+	void OnPlayerStateInitialized();
 	
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
